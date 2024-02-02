@@ -1,38 +1,45 @@
 pipeline {
-	agent any
-		stage('One'){
-			steps{
-				echo "Hi, this is One"
-			}
-		}
-		stage('Two'){
-			steps{
-				echo "Hi, this is Tne"
-			}
-		}
-		stage('Three'){
-			steps{
-				echo "Hi, this is Three"
-			}
-		}
-		stage('Four'){
-			parallel {
-				stage('Unit Test'){
-					steps {
-						echo "Running the unit test..."
-					}
-				}
-				stage('Integration Test'){
-					agent {
-						docker {
-							reuseNode true
-							image 'ubuntu'
-						}
-					}
-					steps {
-						echo "Running the Integration test..."
-					}
-				}
-			}
-		}
+         agent any
+         stages {
+                 stage('One') {
+                 steps {
+                     echo 'Hi, this is Zulaikha from edureka'
+                 }
+                 }
+                 stage('Two') {
+                 steps {
+                    input('Do you want to proceed?')
+                 }
+                 }
+                 stage('Three') {
+                 when {
+                       not {
+                            branch "master"
+                       }
+                 }
+                 steps {
+                       echo "Hello"
+                 }
+                 }
+                 stage('Four') {
+                 parallel { 
+                            stage('Unit Test') {
+                           steps {
+                                echo "Running the unit test..."
+                           }
+                           }
+                            stage('Integration test') {
+                              agent {
+                                    docker {
+                                            reuseNode true
+                                            image 'ubuntu'
+                                           }
+                                    }
+                              steps {
+                                echo "Running the integration test..."
+                              }
+                           }
+                           }
+                           }
+              }
 }
